@@ -1,0 +1,29 @@
+<Sysmon schemaversion="4.82">
+  <HashAlgorithms>md5,sha256</HashAlgorithms>
+  <CheckRevoked>false</CheckRevoked>
+  
+  <EventFiltering>
+    <!-- Event 1: Process Creation -->
+    <RuleGroup name="ProcessCreate" groupRelation="or">
+      <ProcessCreate onmatch="include">
+        <CommandLine condition="contains">powershell</CommandLine>
+        <CommandLine condition="contains">cmd.exe</CommandLine>
+      </ProcessCreate>
+    </RuleGroup>
+    
+    <!-- Event 3: Network Connection -->
+    <RuleGroup name="NetworkConnect" groupRelation="or">
+      <NetworkConnect onmatch="include">
+        <DestinationPort condition="is">445</DestinationPort>
+        <DestinationPort condition="is">3389</DestinationPort>
+      </NetworkConnect>
+    </RuleGroup>
+    
+    <!-- Event 10: Process Access -->
+    <RuleGroup name="ProcessAccess" groupRelation="or">
+      <ProcessAccess onmatch="include">
+        <TargetImage condition="contains">lsass.exe</TargetImage>
+      </ProcessAccess>
+    </RuleGroup>
+  </EventFiltering>
+</Sysmon>
